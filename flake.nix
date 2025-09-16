@@ -1,25 +1,17 @@
 {
-  description = "xzl的nix配置 with hydenix";
+  description = "整合版NixOS Flakes配置";
   
   inputs = {
-    # 基础系统依赖
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    hydenix.url = "github:richen604/hydenix";
+    nix-index.url = "github:nix-community/nix-index-database";
     
-    # Hydenix扩展
-    hydenix = {
-      url = "github:richen604/hydenix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    
-    # 系统工具依赖
-    nix-index-database = {
-      url = "github:nix-community/nix-index-database";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # 依赖关系声明
+    hydenix.inputs.nixpkgs.follows = "nixpkgs";
+    nix-index.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, hydenix, nix-index-database, ... }@inputs: {
-    # 基础系统配置
+  outputs = { self, nixpkgs, hydenix, nix-index, ... }@inputs: {
     nixosConfigurations.nixos-xzl = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { inherit inputs; };
@@ -30,17 +22,16 @@
         # Hydenix核心模块
         inputs.hydenix.inputs.hydenix-nixpkgs.lib.modules.common
         
-        # 系统工具配置
+        # 系统增强
         {
-          nixpkgs.overlays = [ inputs.nix-index-database.overlays.default ];
+          # 包管理优化
+          nixpkgs.overlays = [ inputs.nix-index.overlays.default ];
+          
+          # 环境配置
+          environment.systemPackages = [ pkgs.chromium ];
+          programs.zsh.enable = true;
         }
       ];
     };
-
-    # 增强开发配置
-    nixosConfigurations.developer = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = { inherit inputs; };
-      modules = [
-        # 用户基础配置
-        ./configuration
+  };
+}
