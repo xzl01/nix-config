@@ -14,6 +14,9 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # BootKernel
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_6_16;
+
   networking.hostName = "nixos-xzl"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
