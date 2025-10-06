@@ -27,10 +27,12 @@
       modules = [
         ./configuration.nix
 	./base/fonts.nix
-	./base/basetools.nix
-	./gui/fcitx5.nix
-	./gui/devtools.nix
-	./gui/im.nix
+        ./base/basetools.nix
+        ./cli/tui-tools.nix
+        ./gui/fcitx5.nix
+        ./gui/devtools.nix
+        ./gui/im.nix
+        ./gui/de.nix
       ];
     };
   };
