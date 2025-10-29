@@ -118,9 +118,6 @@
   # Install firefox.
   programs.firefox.enable = true;
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
   # Use MirrorZ mirror
   nix.settings.substituters = [ "https://mirrors.cernet.edu.cn/nix-channels/store" ];
 
